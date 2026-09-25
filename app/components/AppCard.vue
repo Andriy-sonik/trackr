@@ -1,15 +1,22 @@
-<template lang="">
-    <div>
-        <h6>Revolut</h6>
-        <span>Frontend Engineer</span>
-        <datetime>12 вер</datetime>
-    </div>
-</template>
-<script>
-export default {
-    
+<script setup lang="ts">
+type TInfoJob = {
+  company_name: string
+  position: string
+  status: string
+  date: string
+  job_link: string
+  notes: string
 }
+
+const props = defineProps<{ job: TInfoJob }>()
 </script>
-<style lang="">
-    
-</style>
+
+<template lang="">
+  <div>
+    <h6>{{ props.job.company_name || 'Company Name' }}</h6>
+    <span>{{ props.job.position || 'Position' }}</span>
+    <datetime>{{ props.job.date || 'Date' }}</datetime>
+  </div>
+</template>
+
+<style lang=""></style>

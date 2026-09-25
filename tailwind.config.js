@@ -3,8 +3,7 @@ export default {
   prefix: 'tw-',
   content: [],
   theme: {
-    extend: {
-    },
+    extend: {},
   },
   plugins: [],
 }
