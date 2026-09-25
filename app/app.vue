@@ -42,14 +42,24 @@ const bord = ref({
       <div class="sidebar__logo">TRAKER</div>
       <nav class="sidebar__nav">
         <ul>
-          <li v-for="item in navItems" :key="item.name" class="sidebar__nav-item">
-            <AppIcon :name="item.icon" :size="24" />
+          <li
+            v-for="item in navItems"
+            :key="item.name"
+            class="sidebar__nav-item"
+          >
+            <AppIcon
+              :name="item.icon"
+              :size="24"
+            />
             <span>{{ item.name }}</span>
           </li>
         </ul>
       </nav>
       <button class="sidebar__logout-button">
-        <AppIcon name="logout" :size="24" />
+        <AppIcon
+          name="logout"
+          :size="24"
+        />
         <span>Add</span>
       </button>
     </aside>
@@ -60,10 +70,17 @@ const bord = ref({
         <button>Додати</button>
       </div>
       <div class="content__body">
-        <div v-for="(column, idx) in bord" :key="idx" class="content__body-item">
+        <div
+          v-for="(column, idx) in bord"
+          :key="idx"
+          class="content__body-item"
+        >
           <h5>{{ idx }}</h5>
           <ul>
-            <li v-for="job in column" :key="job.id + job.company_name">
+            <li
+              v-for="job in column"
+              :key="job.id + job.company_name"
+            >
               <AppCard :job="job" />
             </li>
           </ul>
