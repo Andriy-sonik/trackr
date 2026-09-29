@@ -1,44 +1,45 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import AppButton from './components/UI/AppButton.vue'
+import AppModal from './components/UI/AppModal.vue'
+import { useJobsStore } from '~/stores/jobs.ts'
+
+type Job = {
+  id: string
+  company_name: string
+  position: string
+  status: string
+  date: string
+  job_link: string
+  notes: string
+}
+
 const navItems = [{ name: 'Board', icon: 'board' }]
 
-const bord = ref({
-  applications: [
-    {
-      id: '12323123',
-      company_name: 'Revolut',
-      position: 'Frontend Engineer',
-      status: 'Подано',
-      date: '12 вер',
-      job_link: 'https://www.revolut.com/',
-      notes: 'Some notes about the job application',
-    },
-    {
-      id: 'sdfsdf2342',
-      company_name: 'Revolut1',
-      position: 'Frontend Engineer',
-      status: 'Подано',
-      date: '12 вер',
-      job_link: 'https://www.revolut.com/',
-      notes: 'Some notes about the job application',
-    },
-  ],
-  interview: [
-    {
-      id: '213131',
-      company_name: 'Revolut2',
-      position: 'Frontend Engineer',
-      status: 'Подано',
-      date: '12 вер',
-      job_link: 'https://www.revolut.com/',
-      notes: 'Some notes about the job application',
-    },
-  ],
+// interview, applications
+const STATUS = {
+  INTERVIEW: 'interview',
+  APPLICATIONS: 'applications',
+}
+const store = useJobsStore()
+
+const activeJobs = computed(() =>
+  store.jobs.reduce((acc, job) => (job.status === STATUS.INTERVIEW ? acc + 1 : acc), 0),
+)
+
+const groupedJobs = computed(() => {
+  return Object.groupBy(store.jobs, (job) => job.status)
 })
+
+const modal = useModal()
+const openAddJobModal = () => {
+  modal.open('AddJob')
+}
 </script>
 
 <template>
   <main class="main">
-    <aside class="sidebar">
+    <!-- <aside class="sidebar">
       <div class="sidebar__logo">TRAKER</div>
       <nav class="sidebar__nav">
         <ul>
@@ -62,37 +63,71 @@ const bord = ref({
         />
         <span>Add</span>
       </button>
-    </aside>
+    </aside> -->
     <article class="content">
       <div class="content__header">
-        <h3>Мої відгуки</h3>
-        <span>10 активних</span>
-        <button>Додати</button>
+        <h3 class="content__header-title">
+          Мої відгуки
+          <span>({{ activeJobs }} активних)</span>
+        </h3>
+        <AppButton
+          variant="primary"
+          size="md"
+          type="button"
+          @click="openAddJobModal"
+        >
+          Додати
+        </AppButton>
       </div>
       <div class="content__body">
         <div
-          v-for="(column, idx) in bord"
-          :key="idx"
-          class="content__body-item"
+          v-for="(jobs, category) in groupedJobs"
+          key="category"
+          class="content__body-group"
         >
-          <h5>{{ idx }}</h5>
+          <h6>{{ category }}</h6>
           <ul>
-            <li
-              v-for="job in column"
-              :key="job.id + job.company_name"
-            >
-              <AppCard :job="job" />
+            <li>
+              <AppCard
+                v-for="job in jobs"
+                :key="job.id"
+                :job="job"
+                class="content__body-item"
+              />
             </li>
           </ul>
         </div>
       </div>
     </article>
+    <ClientOnly>
+      <AppModal />
+    </ClientOnly>
   </main>
 </template>
 <style lang="scss" scoped>
 .main {
   @apply tw-flex tw-h-[100vh];
 }
+.content {
+  @apply tw-flex-1 tw-flex tw-flex-col tw-p-4;
+}
+
+.content__header {
+  @apply tw-flex tw-justify-between tw-items-center tw-gap-2 tw-p-2;
+}
+.content__header-title {
+  @apply tw-text-2xl tw-font-semibold tw-text-white;
+}
+
+.content__body {
+  @apply tw-flex tw-gap-2;
+}
+
+.content__body-group {
+  @apply tw-text-white tw-flex tw-flex-col tw-gap-2;
+  @apply tw-capitalize tw-font-semibold;
+}
+
 .sidebar {
   @apply tw-flex tw-flex-col tw-bg-gray-100 tw-p-4 tw-w-64 tw-h-[100vh] tw-border-r tw-border-gray-300 tw-gap-4;
 }
@@ -109,11 +144,5 @@ const bord = ref({
   @apply tw-flex tw-items-center tw-gap-2;
   @apply tw-bg-red-500 tw-p-2 tw-rounded hover:tw-bg-red-600;
   @apply tw-cursor-pointer;
-}
-.content__body {
-  @apply tw-flex tw-gap-2;
-}
-.content__body-item {
-  @apply tw-bg-gray-200 tw-p-2 tw-rounded tw-mb-2;
 }
 </style>
