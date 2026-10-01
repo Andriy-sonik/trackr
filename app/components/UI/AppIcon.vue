@@ -1,3 +1,10 @@
+<script setup lang="ts">
+defineProps<{
+  name: string
+  size?: number
+  label?: string
+}>()
+</script>
 <template>
   <svg
     :width="size"
@@ -10,10 +17,3 @@
     <use :href="`/sprite.svg#${name}`" />
   </svg>
 </template>
-<script setup lang="ts">
-defineProps<{
-  name: string
-  size?: number
-  label?: string
-}>()
-</script>

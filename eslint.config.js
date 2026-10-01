@@ -1,19 +1,7 @@
-import eslint from '@eslint/js'
 import eslintConfigPrettier from 'eslint-config-prettier'
-import eslintPluginVue from 'eslint-plugin-vue'
-import tseslint from 'typescript-eslint'
+import withNuxt from './.nuxt/eslint.config.mjs'
 
-export default tseslint.config(
-  {
-    ignores: ['dist/', 'node_modules/', 'coverage/', '.nuxt/', '.output/'],
-  },
-
-  eslint.configs.recommended,
-
-  ...tseslint.configs.recommended,
-
-  ...eslintPluginVue.configs['flat/recommended'],
-
+export default withNuxt(
   {
     files: ['**/*.{js,ts,vue}'],
 
@@ -25,7 +13,7 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
-
+      '@typescript-eslint/consistent-type-imports': 'off',
       'vue/multi-word-component-names': 'off',
 
       'vue/no-mutating-props': 'error',
@@ -38,6 +26,7 @@ export default tseslint.config(
           order: ['script', 'template', 'style'],
         },
       ],
+
       'vue/max-attributes-per-line': [
         'error',
         {

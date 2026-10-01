@@ -1,21 +1,10 @@
 <script setup lang="ts">
-type TInfoJob = {
-  company_name: string
-  position: string
-  status: string
-  date: string
-  job_link: string
-  notes: string
-}
+import { STATUS } from '~/constants/index.ts'
+import type { TJob, TJobStatus } from '~/models/TJob.ts'
 
-const props = defineProps<{ job: TInfoJob }>()
+const props = defineProps<{ job: TJob }>()
 
-const STATUS = {
-  INTERVIEW: 'interview',
-  APPLICATIONS: 'applications',
-}
-
-const STATUS_COLORS: Record<string, string> = {
+const STATUS_COLORS: Record<TJobStatus, string> = {
   [STATUS.INTERVIEW]: 'green',
   [STATUS.APPLICATIONS]: 'yellow',
 }

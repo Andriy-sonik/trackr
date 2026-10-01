@@ -1,19 +1,8 @@
-type Job = {
-  id: string
-  company_name: string
-  position: string
-  status: string
-  date: string
-  job_link: string
-  notes: string
-}
-const STATUS = {
-  INTERVIEW: 'interview',
-  APPLICATIONS: 'applications',
-}
+import type { TJob } from '~/models/TJob.ts'
+import { STATUS } from '~/constants/index.ts'
 
-export const useJobsStore = defineStore('counter', () => {
-  const jobs = ref<Job[]>([
+export const useJobsStore = defineStore('jobs', () => {
+  const jobs = ref<TJob[]>([
     {
       id: '12323123',
       company_name: 'Revolut',
@@ -23,18 +12,9 @@ export const useJobsStore = defineStore('counter', () => {
       job_link: 'https://www.revolut.com/',
       notes: 'Some notes about the job application',
     },
-    {
-      id: '12323123',
-      company_name: 'Revolut',
-      position: 'Frontend Engineer',
-      status: STATUS.APPLICATIONS,
-      date: '12 вер',
-      job_link: 'https://www.revolut.com/',
-      notes: 'Some notes about the job application',
-    },
   ])
 
-  const addJob = (job: Job) => {
+  const addJob = (job: TJob) => {
     jobs.value.push(job)
   }
 
