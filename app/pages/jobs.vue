@@ -14,10 +14,20 @@ const groupedJobs = computed<Partial<Record<TJobStatus, TJob[]>>>(() => {
   return Object.groupBy(jobs.value || [], (job) => job.status)
 })
 
+const categories: Record<TJobStatus, string> = {
+  [STATUS.INTERVIEW]: "Інтерв'ю",
+  [STATUS.APPLICATIONS]: 'Відгуки',
+  [STATUS.OFFER]: 'Пропозиції',
+  [STATUS.REJECTED]: 'Відмови',
+}
+
 const modal = useModal()
 const openAddJobModal = () => {
   modal.open('AddJob')
 }
+onMounted(async () => {
+  await store.getJobs()
+})
 </script>
 <template lang="">
   <div class="job-page">
@@ -37,8 +47,8 @@ const openAddJobModal = () => {
     </header>
     <div class="job-page__content">
       <div
-        v-for="(jobs_list, category_name) in groupedJobs"
-        :key="category_name"
+        v-for="(name_category, key_category) in categories"
+        :key="key_category"
         class="job-page__category"
       >
         <h6 class="job-page__category-title">
@@ -46,12 +56,12 @@ const openAddJobModal = () => {
             name="mail"
             :size="16"
           />
-          {{ category_name }}
+          {{ name_category }}
         </h6>
         <ul>
           <li>
             <AppCard
-              v-for="job in jobs_list"
+              v-for="job in groupedJobs[key_category] || []"
               :key="job.id"
               :job="job"
               class="job-page__content-body-item"

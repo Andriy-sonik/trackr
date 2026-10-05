@@ -1,14 +1,26 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ROUTES } from '~/constants/index.ts'
+</script>
 
 <template>
   <header class="header">
-    <div class="header__logo">TRAKER</div>
+    <NuxtLink
+      to="/"
+      class="header__logo"
+      >TRAKER</NuxtLink
+    >
+    <NuxtLink
+      :to="ROUTES.JOBS"
+      class="header__link"
+    >
+      Jobs
+    </NuxtLink>
     <AppButton
       variant="secondary"
       size="md"
       type="button"
     >
-      Loggin
+      Login
     </AppButton>
   </header>
 </template>
