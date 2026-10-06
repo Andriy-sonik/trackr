@@ -2,7 +2,6 @@
 import { useJobsStore } from '~/stores/jobs.ts'
 import { STATUS } from '~/constants/index.ts'
 import type { TJob, TJobStatus } from '~/models/TJob.ts'
-
 const store = useJobsStore()
 const { jobs } = storeToRefs(store)
 
@@ -22,8 +21,9 @@ const categories: Record<TJobStatus, string> = {
 }
 
 const modal = useModal()
+
 const openAddJobModal = () => {
-  modal.open('AddJob')
+  modal.open('DetailedJob')
 }
 onMounted(async () => {
   await store.getJobs()
@@ -32,10 +32,10 @@ onMounted(async () => {
 <template lang="">
   <div class="job-page">
     <header class="job-page__header">
-      <h3 class="job-page__header-title">
-        Мої відгуки
+      <div class="job-page__header-title">
+        <h1>{{ $t('my_reviews') }}</h1>
         <span>({{ activeJobs }} активних)</span>
-      </h3>
+      </div>
       <AppButton
         variant="primary"
         size="md"
@@ -65,6 +65,7 @@ onMounted(async () => {
               :key="job.id"
               :job="job"
               class="job-page__content-body-item"
+              @click="modal.open('DetailedJob', { job })"
             />
           </li>
         </ul>

@@ -2,6 +2,12 @@
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+## Database
+
+Job applications are stored in SQLite in `.data/jobs.sqlite`. The database file
+and its table are created automatically when the jobs API is first used. Keep
+the `.data` directory on persistent storage when deploying the application.
+
 ## Setup
 
 Make sure to install dependencies:

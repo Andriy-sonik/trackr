@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ROUTES } from '~/constants/index.ts'
+const { locales, setLocale } = useI18n()
 </script>
 
 <template>
@@ -15,6 +16,16 @@ import { ROUTES } from '~/constants/index.ts'
     >
       Jobs
     </NuxtLink>
+    <div class="header__locale-switcher">
+      <AppButton
+        v-for="locale in locales"
+        :key="locale.code"
+        :variant="$i18n.locale === locale.code ? 'primary' : 'secondary'"
+        @click="setLocale(locale.code)"
+      >
+        {{ locale.code }}
+      </AppButton>
+    </div>
     <AppButton
       variant="secondary"
       size="md"

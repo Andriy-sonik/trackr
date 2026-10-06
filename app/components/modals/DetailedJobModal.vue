@@ -1,22 +1,32 @@
 <script setup lang="ts">
 import AppButton from '~/components/UI/AppButton.vue'
 import { useModal } from '~/composables/useModal'
+import type { TJob } from '~/models/TJob'
 import { useJobsStore } from '~/stores/jobs.ts'
+import { STATUS } from '~/constants/index.ts'
 
 const modal = useModal()
 const store = useJobsStore()
 
+const props = defineProps<{
+  job?: TJob
+}>()
+
 const form = ref({
-  company: '',
-  position: '',
-  status: 'interview',
-  date: '',
-  job_link: '',
-  notes: '',
+  company: props.job?.company_name || '',
+  position: props.job?.position || '',
+  status: props.job?.status || (STATUS.APPLICATIONS as TJob['status']),
+  date: props.job ? props.job?.date : new Date().toISOString().slice(0, 16),
+  job_link: props.job?.job_link || '',
+  notes: props.job?.notes || '',
 })
 
-const onSubmit = (e: Event) => {
-  const newJob = {
+const errorMessage = ref('')
+
+const isEditMode = computed(() => !!props.job)
+
+const onSubmit = async () => {
+  const newJob: Omit<TJob, 'id'> = {
     company_name: form.value.company,
     position: form.value.position,
     status: form.value.status,
@@ -24,12 +34,26 @@ const onSubmit = (e: Event) => {
     job_link: form.value.job_link,
     notes: form.value.notes,
   }
+  console.log('Submitting job:', newJob)
+
+  errorMessage.value = ''
   try {
-    store.addJob(newJob)
+    await store.addJob(newJob)
     modal.closeTop()
-    console.log('New job added:', newJob)
   } catch (error) {
     console.error('Error adding job:', error)
+    errorMessage.value = 'Не вдалося зберегти заявку. Спробуйте ще раз.'
+  }
+}
+
+const deleteJob = async (jobId: string | undefined) => {
+  if (!jobId) return
+  try {
+    await store.deleteJob(jobId)
+    modal.closeTop()
+  } catch (error) {
+    console.error('Error deleting job:', error)
+    errorMessage.value = 'Не вдалося видалити заявку. Спробуйте ще раз.'
   }
 }
 </script>
@@ -42,9 +66,9 @@ const onSubmit = (e: Event) => {
         <label for="company">Компанія:</label>
         <input
           id="company"
+          v-model="form.company"
           type="text"
           name="company"
-          v-model="form.company"
           placeholder="Enter company name"
         />
       </div>
@@ -52,9 +76,9 @@ const onSubmit = (e: Event) => {
         <label for="position">Посада:</label>
         <input
           id="position"
+          v-model="form.position"
           type="text"
           name="position"
-          v-model="form.position"
           placeholder="Enter position"
         />
       </div>
@@ -62,8 +86,8 @@ const onSubmit = (e: Event) => {
         <label for="status">Статус:</label>
         <select
           id="status"
-          name="status"
           v-model="form.status"
+          name="status"
         >
           <option value="interview">Інтерв'ю</option>
           <option value="applications">Заявки</option>
@@ -73,9 +97,9 @@ const onSubmit = (e: Event) => {
         <label for="date">Дата:</label>
         <input
           id="date"
-          type="date"
-          name="date"
           v-model="form.date"
+          type="datetime-local"
+          name="date"
           placeholder="Select date"
         />
       </div>
@@ -83,9 +107,9 @@ const onSubmit = (e: Event) => {
         <label for="job_link">Посилання на вакансію:</label>
         <input
           id="job_link"
+          v-model="form.job_link"
           type="url"
           name="job_link"
-          v-model="form.job_link"
           placeholder="Enter job link"
         />
       </div>
@@ -93,21 +117,39 @@ const onSubmit = (e: Event) => {
         <label for="notes">Нотатки:</label>
         <textarea
           id="notes"
+          v-model="form.notes"
           name="notes"
           rows="4"
-          v-model="form.notes"
           placeholder="Enter notes"
         ></textarea>
       </div>
-      <AppButton type="submit">Submit</AppButton>
+      <p
+        v-if="errorMessage"
+        role="alert"
+      >
+        {{ errorMessage }}
+      </p>
+      <div class="modal-actions">
+        <AppButton type="submit">Submit</AppButton>
+        <AppButton
+          v-if="isEditMode && props?.job?.id"
+          type="button"
+          variant="danger"
+          @click="deleteJob(props.job?.id)"
+        >
+          Delete job
+        </AppButton>
+      </div>
     </form>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .modal-content {
-  display: grid;
-  gap: 1.25rem;
+  @apply tw-grid tw-gap-2;
+}
+.modal-actions {
+  @apply tw-flex tw-flex-row tw-gap-1 tw-justify-between tw-mt-2;
 }
 form {
   div {

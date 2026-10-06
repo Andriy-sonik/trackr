@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import AddJobModal from '~/components/modals/AddJobModal.vue'
+import DetailedJobModal from '~/components/modals/DetailedJobModal.vue'
 import ConfirmActionModal from '~/components/modals/ConfirmActionModal.vue'
 import { useModal } from '~/composables/useModal'
 
 const modal = useModal()
 const stack = modal.stack
 const modalComponents = {
-  AddJob: AddJobModal,
+  DetailedJob: DetailedJobModal,
   ConfirmAction: ConfirmActionModal,
 }
 const modalTitles = {
-  AddJob: 'Нова заявка',
+  DetailedJob: 'Деталі заявки',
   ConfirmAction: 'Підтвердження дії',
 }
 

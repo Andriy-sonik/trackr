@@ -1,4 +1,4 @@
-export type ModalName = 'AddJob' | 'ConfirmAction'
+export type ModalName = 'DetailedJob' | 'ConfirmAction'
 
 export type ModalInstance = {
   id: string

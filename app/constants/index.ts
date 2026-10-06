@@ -10,4 +10,9 @@ const ROUTES = {
   LOGIN: '/login',
 } as const
 
-export { STATUS, ROUTES }
+const API_ROUTES = {
+  JOBS: '/api/jobs',
+  LOGIN: '/api/login',
+} as const
+
+export { STATUS, ROUTES, API_ROUTES }

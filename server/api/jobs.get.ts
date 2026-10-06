@@ -1,16 +1,22 @@
-import { STATUS } from '~/constants'
+import type { TJob } from '~/models/TJob'
+import { getDatabase } from '../utils/database'
 
-export default defineEventHandler(() => {
-  console.log('Node.js + SQLite')
-  return [
-    {
-      id: '12323123',
-      company_name: 'Revolut',
-      position: 'Frontend Engineer',
-      status: STATUS.INTERVIEW,
-      date: '12 вер',
-      job_link: 'https://www.revolut.com/',
-      notes: 'Some notes about the job application',
-    },
-  ]
+export default defineEventHandler(async () => {
+  const database = await getDatabase()
+
+  return new Promise<TJob[]>((resolve, reject) => {
+    database.all<TJob>(
+      `SELECT id, company_name, position, status, date, job_link, notes
+       FROM jobs
+       ORDER BY rowid DESC`,
+      (error, rows) => {
+        if (error) {
+          reject(error)
+          return
+        }
+
+        resolve(rows)
+      },
+    )
+  })
 })
