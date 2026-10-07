@@ -13,6 +13,18 @@ export const useJobsStore = defineStore('jobs', () => {
     return createdJob
   }
 
+  const updateJob = async (jobId: string, updatedJob: Omit<TJob, 'id'>) => {
+    const updatedJobResponse = await $fetch<TJob>(API_ROUTES.JOBS, {
+      method: 'PUT',
+      query: { id: jobId },
+      body: updatedJob,
+    })
+
+    jobs.value = jobs.value.map((job) => (job.id === jobId ? updatedJobResponse : job))
+
+    return updatedJobResponse
+  }
+
   const deleteJob = async (jobId: string | undefined) => {
     if (!jobId) {
       throw new Error('Job ID is required for deletion.')
@@ -29,5 +41,5 @@ export const useJobsStore = defineStore('jobs', () => {
     jobs.value = await $fetch<TJob[]>(API_ROUTES.JOBS)
   }
 
-  return { jobs, addJob, deleteJob, getJobs }
+  return { jobs, addJob, deleteJob, getJobs, updateJob }
 })

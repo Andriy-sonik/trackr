@@ -9,6 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "generate:sprite": "tsx scripts/generate-sprite.ts",
+    "generate:themes": "tsx scripts/generate-themes.ts",
+    "predev": "npm run generate:themes && npm run generate:sprite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",

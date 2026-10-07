@@ -1,7 +1,9 @@
+@import '../generated/themes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  @apply tw-bg-gray-800 tw-text-gray-900 tw-font-sans;
+  @apply tw-bg-primary tw-text-gray-900 tw-font-sans;
 }

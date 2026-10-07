@@ -38,7 +38,11 @@ const onSubmit = async () => {
 
   errorMessage.value = ''
   try {
-    await store.addJob(newJob)
+    if (isEditMode.value && props.job?.id) {
+      await store.updateJob(props.job.id, newJob)
+    } else {
+      await store.addJob(newJob)
+    }
     modal.closeTop()
   } catch (error) {
     console.error('Error adding job:', error)
@@ -130,7 +134,7 @@ const deleteJob = async (jobId: string | undefined) => {
         {{ errorMessage }}
       </p>
       <div class="modal-actions">
-        <AppButton type="submit">Submit</AppButton>
+        <AppButton type="submit">{{ isEditMode ? 'Update Job' : 'Submit Job' }}</AppButton>
         <AppButton
           v-if="isEditMode && props?.job?.id"
           type="button"

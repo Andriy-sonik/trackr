@@ -32,17 +32,17 @@ onMounted(async () => {
 <template lang="">
   <div class="job-page">
     <header class="job-page__header">
-      <div class="job-page__header-title">
-        <h1>{{ $t('my_reviews') }}</h1>
+      <h1 class="job-page__header-title">
+        {{ $t('my_reviews') }}
         <span>({{ activeJobs }} активних)</span>
-      </div>
+      </h1>
       <AppButton
         variant="primary"
         size="md"
         type="button"
         @click="openAddJobModal"
       >
-        Додати
+        {{ $t('add_job') }}
       </AppButton>
     </header>
     <div class="job-page__content">

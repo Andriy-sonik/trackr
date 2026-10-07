@@ -1,0 +1,10 @@
+[data-theme="light"] {
+  --primary: oklch(70.7% 0.022 261.325);
+  --primaryHover: oklch(55.2% 0.016 285.938);
+}
+
+[data-theme="dark"] {
+  --primary: oklch(20.8% 0.042 265.755);
+  --primaryHover: oklch(44.6% 0.043 257.281);
+}
+

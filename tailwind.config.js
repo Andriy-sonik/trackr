@@ -3,7 +3,12 @@ export default {
   prefix: 'tw-',
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: 'var(--primary)',
+        primaryHover: 'var(--primaryHover)',
+      },
+    },
   },
   plugins: [],
 }
